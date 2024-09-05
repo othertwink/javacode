@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  wallet-service:
+    build:
+      context: ./wallet-service
+      dockerfile: Dockerfile
+    ports:
+#      - ${SERVICE_PORTS}
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/walletapp
+      SPRING_DATASOURCE_USERNAME: dbaev
+      SPRING_DATASOURCE_PASSWORD: javadoc
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: dbaev
+      POSTGRES_PASSWORD: javadoc
+      POSTGRES_DB: waletapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+
+

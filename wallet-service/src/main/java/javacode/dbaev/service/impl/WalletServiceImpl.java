@@ -16,18 +16,17 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class WalletServiceImpl implements WalletService {
 
-//    @PostConstruct
-//    public void init() {
-//        System.out.println("WalletServiceImpl is getting up... Creating Random Wallet");
-//        Wallet wallet = Wallet.builder()
-//                .walletId(UUID.randomUUID())
-//                .balance(10000.0)
-//                .version(0L)
-//                .build();
-//
-//        walletDAO.save(wallet);
-//        System.out.println("New Wallet UUID " + wallet.getWalletId());
-//    }
+    @PostConstruct
+    public void init() {
+            System.out.println("WalletServiceImpl is getting up for the first time... Creating random UUID Wallet");
+            Wallet wallet = Wallet.builder()
+                    .walletId(UUID.randomUUID())
+                    .balance(10000.0)
+                    .version(0L)
+                    .build();
+            walletDAO.save(wallet);
+            System.out.println("New Wallet UUID " + wallet.getWalletId() + " created");
+    }
 
     @Autowired
     private WalletDAO walletDAO;
@@ -49,13 +48,11 @@ public class WalletServiceImpl implements WalletService {
 
                 if (operationType.equals(OperationType.DEPOSIT)) {
                     wallet.setBalance(wallet.getBalance() + amount);
-                    System.out.println("|||||||| WOW, deposited! ||||||||| " + walletId);
                 } else if (operationType.equals(OperationType.WITHDRAW)) {
                     if (wallet.getBalance() < amount) {
                         throw new IllegalArgumentException("Сумма списания слишком велика");
                     }
                     wallet.setBalance(wallet.getBalance() - amount);
-                    System.out.println("|||||||| WOW, withdrawed! ||||||||| " + walletId);
                 } else {
                     throw new IllegalArgumentException("Неизвестный тип операции");
                 }
